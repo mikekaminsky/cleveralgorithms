@@ -24,8 +24,7 @@ def create_particle(search_space, vel_space)
 end
 
 def get_global_best(population, current_best=nil)
-  population.sort!{|left,right| left[:cost] <=> right[:cost]}
-  best = population.first
+  best = population.sort{|left,right| left[:cost] <=> right[:cost]}.first
   if current_best.nil? or best[:cost] <= current_best[:cost]
     current_best = {}
     current_best[:position] = Array.new(best[:position])
@@ -97,16 +96,16 @@ end
 data = {}
 problem_size = 2 # Number of dimensions
 max_gens = 100 # Number of iterations
-pop_size = 50 # Number of particles
+pop_size = 10 # Number of particles
 
-search_space = Array.new(problem_size) {|i| [-5, 5]} # Size of field
+search_space = Array.new(problem_size) {|i| [-5, 5]} # Size of field to search
 vel_space = Array.new(problem_size) {|i| [-1, 1]} # ????
 c1, c2 = 2.0, 2.0 # ???
 
 # Original value: 100
 # Changing to 10 leads all of the particles to get trapped in the corners
-# Changing to 5 leads to BUG where the fitness *decreases*
-max_vel = 5.0
+# Changing to 1 leads to more expected behavior
+max_vel = 1.0
 
 best, outdata = search(max_gens, search_space, vel_space, pop_size, max_vel, c1, c2)
 puts "done! Solution: f=#{best[:cost]}, s=#{best[:position].inspect}"
